@@ -365,6 +365,7 @@
                     <li><a href="#">Tipspromenader</a></li>
                     <li><a href="#">Reseguider</a></li>
                     <li><a href="#">Om oss</a></li>
+                    <li><a href="admin.html" style="color: #d4af37;">📝 Admin</a></li>
                 </ul>
                 <button class="mobile-menu-btn">☰</button>
             </nav>
@@ -385,60 +386,8 @@
     <section class="articles-section">
         <div class="container">
             <h2 class="section-title">Senaste Artiklarna</h2>
-            <div class="articles-grid">
-                <div class="article-card">
-                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1509356843151-3e7d96241e11?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
-                    <div class="article-content">
-                        <h3>🏛️ Stockholms Stadshus – nationalromantik vid vattnet</h3>
-                        <p>När Ragnar Östberg ritade Stockholms stadshus (invigt 1923) skapade han ett verk som är lika mycket ett monument över Sverige som en funktionell byggnad. Med sin 106 meter höga tornspira, krönt av de tre gyllene kronorna, är huset ett av landets mest kända landmärken.</p>
-                        <a href="stockholms-stadshus.html" class="read-more">Läs mer →</a>
-                    </div>
-                </div>
-                
-                <div class="article-card">
-                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1541336032412-2048a678540d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
-                    <div class="article-content">
-                        <h3>Eiffeltornet - Från kontrovers till ikon</h3>
-                        <p>Upptäck hur Paris mest kända landmärke gick från att vara kontroversiellt till att bli en av världens mest älskade byggnader.</p>
-                        <a href="#" class="read-more">Läs mer →</a>
-                    </div>
-                </div>
-                
-                <div class="article-card">
-                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1513581166391-887a96ddeafd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
-                    <div class="article-content">
-                        <h3>Turning Torso – skyskrapan som vrider sig mot framtiden</h3>
-                        <p>När Santiago Calatrava ritade Turning Torso (färdig 2005) satte Malmö Sverige på världskartan för modern arkitektur. Med sina 190 meter är byggnaden Nordens högsta skyskrapa och ett exempel på innovativ ingenjörskonst.</p>
-                        <a href="turning-torso.html" class="read-more">Läs mer →</a>
-                    </div>
-                </div>
-                
-                <div class="article-card">
-                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1503386435952-d7918b99d4c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
-                    <div class="article-content">
-                        <h3>Gamla Stan - Stockholms historiska hjärta</h3>
-                        <p>En guide till de bästa tipspromenaderna i Stockholms medeltida stadskärna och dess fascinerande arkitekturhistoria.</p>
-                        <a href="#" class="read-more">Läs mer →</a>
-                    </div>
-                </div>
-                
-                <div class="article-card">
-                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
-                    <div class="article-content">
-                        <h3>Drottningholms Slott – svensk barock i världsklass</h3>
-                        <p>Vid Mälarens strand utanför Stockholm ligger Drottningholms slott, uppfört på 1600-talet av arkitekten Nicodemus Tessin d.ä. för drottning Hedvig Eleonora. Idag både kungafamiljens bostad och ett världsarv på UNESCO:s lista.</p>
-                        <a href="drottningholms-slott.html" class="read-more">Läs mer →</a>
-                    </div>
-                </div>
-                
-                <div class="article-card">
-                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1505902987837-7b8f4ff9c1e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
-                    <div class="article-content">
-                        <h3>Burj Khalifa - Teknikens under</h3>
-                        <p>Hur byggde man världens högsta byggnad? Utforska den banbrytande tekniken bakom Dubais ikoniska skyskrapa.</p>
-                        <a href="#" class="read-more">Läs mer →</a>
-                    </div>
-                </div>
+            <div class="articles-grid" id="articlesGrid">
+                <!-- Articles will be loaded dynamically -->
             </div>
         </div>
     </section>
@@ -467,6 +416,56 @@
     </footer>
 
     <script>
+        // Load and display articles
+        function loadArticles() {
+            const articlesGrid = document.getElementById('articlesGrid');
+            
+            // Try to load from localStorage first
+            const stored = localStorage.getItem('arkitekturfront_articles');
+            let articles = [];
+            
+            if (stored) {
+                articles = JSON.parse(stored);
+                displayArticles(articles);
+            } else {
+                // Load from JSON file
+                fetch('articles.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        articles = data;
+                        // Save to localStorage for future use
+                        localStorage.setItem('arkitekturfront_articles', JSON.stringify(articles));
+                        displayArticles(articles);
+                    })
+                    .catch(error => {
+                        console.error('Error loading articles:', error);
+                        articlesGrid.innerHTML = '<p style="color: #666; text-align: center;">Kunde inte ladda artiklar.</p>';
+                    });
+            }
+        }
+
+        function displayArticles(articles) {
+            const articlesGrid = document.getElementById('articlesGrid');
+            
+            if (articles.length === 0) {
+                articlesGrid.innerHTML = '<p style="color: #666; text-align: center;">Inga artiklar än.</p>';
+                return;
+            }
+
+            articlesGrid.innerHTML = articles
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map(article => `
+                    <div class="article-card">
+                        <div class="article-image" style="background-image: url('${article.image}');"></div>
+                        <div class="article-content">
+                            <h3>${article.title}</h3>
+                            <p>${article.description}</p>
+                            <a href="article.html?id=${article.id}" class="read-more">Läs mer →</a>
+                        </div>
+                    </div>
+                `).join('');
+        }
+
         // Create interactive buildings
         const buildingsContainer = document.getElementById('buildings');
         const buildingCount = 15;
@@ -524,6 +523,9 @@
         mobileMenuBtn.addEventListener('click', () => {
             navUl.style.display = navUl.style.display === 'flex' ? 'none' : 'flex';
         });
+
+        // Initialize - load articles on page load
+        loadArticles();
     </script>
 </body>
 </html>

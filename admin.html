@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS Admin - Arkitekturfront</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: #d4af37;
+            font-size: 2rem;
+        }
+
+        .back-link {
+            color: #d4af37;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid #d4af37;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background-color: #d4af37;
+            color: #000;
+        }
+
+        .section {
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #d4af37;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="url"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        #content {
+            min-height: 400px;
+        }
+
+        #imagePreview {
+            text-align: center;
+            padding: 15px;
+            background-color: #0a0a0a;
+            border-radius: 8px;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #d4af37;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: #d4af37;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background-color: #f0c860;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .articles-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .article-item {
+            background-color: #0a0a0a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            display: flex;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .article-image-preview {
+            width: 150px;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 5px;
+            flex-shrink: 0;
+        }
+
+        .article-info {
+            flex: 1;
+        }
+
+        .article-info h3 {
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .article-info p {
+            color: #aaa;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .article-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .alert-error {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .alert-info {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .article-item {
+                flex-direction: column;
+            }
+
+            .article-image-preview {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 CMS Admin - Arkitekturfront</h1>
+            <a href="index.html" class="back-link">← Tillbaka till hemsidan</a>
+        </header>
+
+        <div id="alertContainer"></div>
+
+        <!-- Add/Edit Article Form -->
+        <div class="section">
+            <h2 id="formTitle">Lägg till ny artikel</h2>
+            <form id="articleForm">
+                <input type="hidden" id="articleId">
+                
+                <div class="form-group">
+                    <label for="title">Titel *</label>
+                    <input type="text" id="title" required placeholder="T.ex. Eiffeltornet - Från kontrovers till ikon">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Beskrivning *</label>
+                    <textarea id="description" required placeholder="En kort beskrivning av artikeln..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Bild-URL *</label>
+                    <input type="url" id="image" required placeholder="https://images.unsplash.com/photo-...">
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        📌 <strong>Så här kopierar du en bildlänk från Unsplash:</strong><br>
+                        1. Gå till <a href="https://unsplash.com" target="_blank" style="color: #d4af37;">unsplash.com</a><br>
+                        2. Sök efter en bild (på engelska, t.ex. "architecture")<br>
+                        3. Klicka på bilden för att öppna den<br>
+                        4. Högerklicka på bilden → "Kopiera bildadress"<br>
+                        5. Klistra in här!
+                    </small>
+                    <div id="imagePreview" style="margin-top: 15px; display: none;">
+                        <img id="previewImg" style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 2px solid #d4af37;" alt="Förhandsvisning">
+                        <p style="color: #4caf50; margin-top: 10px;">✅ Bilden fungerar!</p>
+                    </div>
+                    <p id="imageError" style="color: #dc3545; margin-top: 10px; display: none;">❌ Bildlänken fungerar inte. Kontrollera att du kopierat bildadressen korrekt.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Huvudartikel</label>
+                    <textarea id="content" placeholder="Skriv din fullständiga artikel här..."></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">💾 Spara artikel</button>
+                    <button type="button" class="btn btn-secondary" id="previewBtn">👁️ Förhandsgranska</button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn" style="display: none;">Avbryt</button>
+                </div>
+                <p id="autoSaveStatus" style="color: #666; margin-top: 10px; font-size: 14px;"></p>
+            </form>
+        </div>
+
+        <!-- Articles List -->
+        <div class="section">
+            <h2>Alla artiklar</h2>
+            <div id="articlesList" class="articles-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let articles = [];
+        let editingId = null;
+
+        // Load articles from localStorage or JSON file
+        function loadArticles() {
+            const stored = localStorage.getItem('arkitekturfront_articles');
+            if (stored) {
+                articles = JSON.parse(stored);
+                displayArticles();
+            } else {
+                // Load from JSON file on first visit
+                fetch('articles.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        articles = data;
+                        saveArticles();
+                        displayArticles();
+                    })
+                    .catch(error => {
+                        showAlert('Kunde inte ladda artiklar. Startar med tom lista.', 'error');
+                        console.error('Error loading articles:', error);
+                    });
+            }
+        }
+
+        // Save articles to localStorage
+        function saveArticles() {
+            localStorage.setItem('arkitekturfront_articles', JSON.stringify(articles));
+        }
+
+        // Display articles in the list
+        function displayArticles() {
+            const container = document.getElementById('articlesList');
+            
+            if (articles.length === 0) {
+                container.innerHTML = '<p style="color: #666;">Inga artiklar än. Lägg till din första artikel ovan!</p>';
+                return;
+            }
+
+            container.innerHTML = articles
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map(article => `
+                    <div class="article-item">
+                        <div class="article-image-preview" style="background-image: url('${article.image}');"></div>
+                        <div class="article-info">
+                            <h3>${article.title}</h3>
+                            <p>${article.description}</p>
+                            <small style="color: #666;">Länk: ${article.link} | Datum: ${article.date}</small>
+                            <div class="article-actions">
+                                <button class="btn btn-secondary" onclick="editArticle(${article.id})">Redigera</button>
+                                <button class="btn btn-danger" onclick="deleteArticle(${article.id})">Ta bort</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        // Show alert message
+        function showAlert(message, type = 'success') {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            container.appendChild(alert);
+
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Handle form submission
+        document.getElementById('articleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const image = document.getElementById('image').value;
+            const content = document.getElementById('content').value;
+
+            // Generate filename from title
+            const filename = title
+                .toLowerCase()
+                .replace(/[åä]/g, 'a')
+                .replace(/ö/g, 'o')
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-|-$/g, '') + '.html';
+
+            if (editingId !== null) {
+                // Update existing article
+                const index = articles.findIndex(a => a.id === editingId);
+                if (index !== -1) {
+                    articles[index] = {
+                        ...articles[index],
+                        title,
+                        description,
+                        image,
+                        content,
+                        link: filename
+                    };
+                    showAlert('Artikeln har uppdaterats!', 'success');
+                }
+                editingId = null;
+                document.getElementById('formTitle').textContent = 'Lägg till ny artikel';
+                document.getElementById('cancelBtn').style.display = 'none';
+            } else {
+                // Add new article
+                const newArticle = {
+                    id: Date.now(),
+                    title,
+                    description,
+                    image,
+                    content,
+                    link: filename,
+                    date: new Date().toISOString().split('T')[0]
+                };
+                articles.unshift(newArticle);
+                showAlert('Ny artikel har lagts till!', 'success');
+            }
+
+            saveArticles();
+            displayArticles();
+            this.reset();
+            document.getElementById('articleId').value = '';
+            
+            // Clear draft and auto-save status
+            localStorage.removeItem('arkitekturfront_draft');
+            autoSaveStatus.textContent = '';
+        });
+
+        // Cancel editing
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            editingId = null;
+            document.getElementById('articleForm').reset();
+            document.getElementById('formTitle').textContent = 'Lägg till ny artikel';
+            this.style.display = 'none';
+        });
+
+        // Edit article
+        function editArticle(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+
+            editingId = id;
+            document.getElementById('title').value = article.title;
+            document.getElementById('description').value = article.description;
+            document.getElementById('image').value = article.image;
+            document.getElementById('content').value = article.content || '';
+            document.getElementById('formTitle').textContent = 'Redigera artikel';
+            document.getElementById('cancelBtn').style.display = 'inline-block';
+
+            // Scroll to form
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Delete article
+        function deleteArticle(id) {
+            if (!confirm('Är du säker på att du vill ta bort denna artikel?')) return;
+
+            articles = articles.filter(a => a.id !== id);
+            saveArticles();
+            displayArticles();
+            showAlert('Artikeln har tagits bort.', 'info');
+        }
+
+        // Image preview and validation
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const imageError = document.getElementById('imageError');
+
+        imageInput.addEventListener('input', function() {
+            const url = this.value.trim();
+            
+            // Hide previous states
+            imagePreview.style.display = 'none';
+            imageError.style.display = 'none';
+
+            if (!url) return;
+
+            // Try to load the image
+            const img = new Image();
+            
+            img.onload = function() {
+                // Image loaded successfully
+                previewImg.src = url;
+                imagePreview.style.display = 'block';
+                imageError.style.display = 'none';
+            };
+
+            img.onerror = function() {
+                // Image failed to load
+                imagePreview.style.display = 'none';
+                imageError.style.display = 'block';
+            };
+
+            img.src = url;
+        });
+
+        // Auto-save draft functionality
+        let autoSaveTimer;
+        const autoSaveStatus = document.getElementById('autoSaveStatus');
+
+        function autoSaveDraft() {
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const image = document.getElementById('image').value;
+            const content = document.getElementById('content').value;
+
+            if (title || description || image || content) {
+                const draft = { title, description, image, content, timestamp: new Date().toISOString() };
+                localStorage.setItem('arkitekturfront_draft', JSON.stringify(draft));
+                autoSaveStatus.textContent = '💾 Utkast sparat automatiskt ' + new Date().toLocaleTimeString('sv-SE');
+                autoSaveStatus.style.color = '#4caf50';
+            }
+        }
+
+        // Auto-save every 30 seconds
+        ['title', 'description', 'image', 'content'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(autoSaveDraft, 3000); // Save after 3 seconds of inactivity
+            });
+        });
+
+        // Load draft on page load
+        function loadDraft() {
+            const draft = localStorage.getItem('arkitekturfront_draft');
+            if (draft && confirm('Det finns ett sparat utkast. Vill du ladda det?')) {
+                const data = JSON.parse(draft);
+                document.getElementById('title').value = data.title || '';
+                document.getElementById('description').value = data.description || '';
+                document.getElementById('image').value = data.image || '';
+                document.getElementById('content').value = data.content || '';
+                
+                // Trigger image preview
+                if (data.image) {
+                    document.getElementById('image').dispatchEvent(new Event('input'));
+                }
+            }
+        }
+
+        // Preview button
+        document.getElementById('previewBtn').addEventListener('click', function() {
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const image = document.getElementById('image').value;
+            const content = document.getElementById('content').value;
+
+            if (!title || !description || !image) {
+                showAlert('Fyll i minst titel, beskrivning och bild för att förhandsgranska!', 'error');
+                return;
+            }
+
+            // Create preview data
+            const previewData = {
+                id: 'preview',
+                title,
+                description,
+                image,
+                content,
+                date: new Date().toISOString().split('T')[0]
+            };
+
+            // Save to temporary storage
+            localStorage.setItem('arkitekturfront_preview', JSON.stringify(previewData));
+
+            // Open preview in new tab
+            window.open('article.html?id=preview', '_blank');
+        });
+
+        // Export articles to JSON
+        function exportArticles() {
+            const dataStr = JSON.stringify(articles, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'articles.json';
+            link.click();
+        }
+
+        // Initialize
+        loadArticles();
+        loadDraft();
+    </script>
+</body>
+</html>

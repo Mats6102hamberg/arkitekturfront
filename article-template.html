@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[TITEL] - Arkitekturfront</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #333;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #d4af37;
+        }
+
+        .back-link {
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #f0c860;
+        }
+
+        /* Article Hero */
+        .article-hero {
+            height: 60vh;
+            min-height: 400px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            margin-top: 80px;
+            position: relative;
+        }
+
+        .article-hero::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+
+        .article-hero-content {
+            position: relative;
+            z-index: 10;
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .article-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .article-meta {
+            color: #d4af37;
+            font-size: 0.9rem;
+        }
+
+        /* Article Content */
+        .article-content {
+            padding: 60px 20px;
+        }
+
+        .article-content h2 {
+            font-size: 2rem;
+            margin: 40px 0 20px;
+            color: #d4af37;
+        }
+
+        .article-content h3 {
+            font-size: 1.5rem;
+            margin: 30px 0 15px;
+            color: #f0c860;
+        }
+
+        .article-content p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #ddd;
+        }
+
+        .article-content img {
+            width: 100%;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid #d4af37;
+            padding-left: 20px;
+            margin: 30px 0;
+            font-style: italic;
+            color: #aaa;
+        }
+
+        .article-content ul, .article-content ol {
+            margin: 20px 0 20px 30px;
+            color: #ddd;
+        }
+
+        .article-content li {
+            margin-bottom: 10px;
+        }
+
+        /* Info Box */
+        .info-box {
+            background-color: #1a1a1a;
+            border-left: 4px solid #d4af37;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 5px;
+        }
+
+        .info-box h4 {
+            color: #d4af37;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0a0a0a;
+            padding: 40px 0 20px;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+
+        .copyright {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .article-hero h1 {
+                font-size: 2rem;
+            }
+
+            .article-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .article-content p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">ARKITEKTUR<span>FRONT</span></a>
+            <a href="index.html" class="back-link">← Tillbaka till startsidan</a>
+        </div>
+    </header>
+
+    <!-- Article Hero -->
+    <div class="article-hero" style="background-image: url('[BILD-URL]');">
+        <div class="article-hero-content">
+            <h1>[TITEL]</h1>
+            <div class="article-meta">Publicerad: [DATUM]</div>
+        </div>
+    </div>
+
+    <!-- Article Content -->
+    <article class="article-content container">
+        <p class="intro">
+            [INLEDANDE STYCKE - Skriv en kort introduktion här]
+        </p>
+
+        <h2>Historia och bakgrund</h2>
+        <p>
+            [Skriv om byggnadens historia här...]
+        </p>
+
+        <h2>Arkitektoniska höjdpunkter</h2>
+        <p>
+            [Beskriv de arkitektoniska detaljerna...]
+        </p>
+
+        <div class="info-box">
+            <h4>📍 Snabbfakta</h4>
+            <ul>
+                <li><strong>Plats:</strong> [Stad, Land]</li>
+                <li><strong>Arkitekt:</strong> [Namn]</li>
+                <li><strong>Färdigställd:</strong> [År]</li>
+                <li><strong>Stil:</strong> [Arkitektonisk stil]</li>
+            </ul>
+        </div>
+
+        <h2>Besök och tips</h2>
+        <p>
+            [Information om hur man besöker platsen...]
+        </p>
+
+        <blockquote>
+            "Ett inspirerande citat om byggnaden eller arkitekturen"
+        </blockquote>
+
+        <h2>Sammanfattning</h2>
+        <p>
+            [Avslutande tankar och sammanfattning...]
+        </p>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p class="copyright">&copy; 2023 Arkitekturfront. Alla rättigheter förbehållna.</p>
+        </div>
+    </footer>
+</body>
+</html>
