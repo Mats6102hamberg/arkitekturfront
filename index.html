@@ -397,10 +397,11 @@
         <div class="container footer-content">
             <div class="newsletter">
                 <h3>Prenumerera på vårt nyhetsbrev</h3>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Din e-postadress" required>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" id="newsletterEmail" placeholder="Din e-postadress" required>
                     <button type="submit">Prenumerera</button>
                 </form>
+                <p id="newsletterMessage" style="margin-top: 10px; font-size: 14px; display: none;"></p>
             </div>
             
             <div class="footer-links">
@@ -522,6 +523,66 @@
         
         mobileMenuBtn.addEventListener('click', () => {
             navUl.style.display = navUl.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Newsletter subscription
+        const newsletterForm = document.getElementById('newsletterForm');
+        const newsletterMessage = document.getElementById('newsletterMessage');
+        
+        // KONFIGURERA DIN E-BREVMOTOR URL HÄR
+        const EBREVMOTOR_API_URL = 'http://localhost:3000'; // Ändra till din e-brevmotors URL
+        
+        newsletterForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('newsletterEmail').value;
+            const button = newsletterForm.querySelector('button');
+            const originalText = button.textContent;
+            
+            // Visa laddning
+            button.textContent = 'Prenumererar...';
+            button.disabled = true;
+            newsletterMessage.style.display = 'none';
+            
+            try {
+                // Skicka till e-brevmotorn
+                const response = await fetch(`${EBREVMOTOR_API_URL}/api/subscribers`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        name: '', // Kan läggas till senare om du vill samla namn
+                        newsletter_slug: 'arkitekturfront' // Slug för Arkitekturfront
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Framgång!
+                    newsletterMessage.textContent = '✅ Tack för din prenumeration! Kolla din e-post för bekräftelse.';
+                    newsletterMessage.style.color = '#4caf50';
+                    newsletterMessage.style.display = 'block';
+                    newsletterForm.reset();
+                } else {
+                    // Fel från servern
+                    newsletterMessage.textContent = data.error || '❌ Något gick fel. Försök igen.';
+                    newsletterMessage.style.color = '#dc3545';
+                    newsletterMessage.style.display = 'block';
+                }
+            } catch (error) {
+                // Nätverksfel
+                console.error('Newsletter subscription error:', error);
+                newsletterMessage.textContent = '❌ Kunde inte ansluta till servern. Kontrollera att e-brevmotorn körs.';
+                newsletterMessage.style.color = '#dc3545';
+                newsletterMessage.style.display = 'block';
+            } finally {
+                // Återställ knappen
+                button.textContent = originalText;
+                button.disabled = false;
+            }
         });
 
         // Initialize - load articles on page load
