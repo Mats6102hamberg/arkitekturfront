@@ -1,0 +1,9 @@
+{
+  "note": "Lägg till 'pg' i dependencies i din package.json",
+  "dependencies": {
+    "pg": "^8.11.3"
+  },
+  "scripts": {
+    "migrate": "node init-database.js"
+  }
+}
