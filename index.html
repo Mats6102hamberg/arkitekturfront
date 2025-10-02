@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arkitekturfront - Historiska byggnader och modern arkitektur</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #d4af37;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #d4af37;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            z-index: 10;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 30px;
+            z-index: 10;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #d4af37;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: transform 0.3s, background-color 0.3s;
+            z-index: 10;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            background-color: #f0c860;
+        }
+
+        /* Interactive Buildings */
+        .buildings-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            pointer-events: none;
+        }
+
+        .building {
+            width: 80px;
+            background: linear-gradient(to top, #1a1a1a, #333);
+            border-radius: 5px 5px 0 0;
+            transition: all 0.5s ease;
+            transform-origin: bottom;
+            position: relative;
+            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .building::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 70%, rgba(212, 175, 55, 0.1));
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .building:hover::before {
+            opacity: 1;
+        }
+
+        .building:hover {
+            transform: scaleY(1.2);
+            background: linear-gradient(to top, #2a2a2a, #444);
+        }
+
+        /* Articles Section */
+        .articles-section {
+            padding: 80px 0;
+            background-color: #111;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background-color: #d4af37;
+            margin: 15px auto;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .article-card {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .article-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .article-image {
+            height: 200px;
+            background-color: #333;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .article-content {
+            padding: 20px;
+        }
+
+        .article-content h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .article-content p {
+            color: #aaa;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .read-more {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0a0a0a;
+            padding: 50px 0 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .newsletter {
+            margin-bottom: 30px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .newsletter h3 {
+            margin-bottom: 15px;
+        }
+
+        .newsletter-form {
+            display: flex;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 30px 0 0 30px;
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        .newsletter-form button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 0 30px 30px 0;
+            background-color: #d4af37;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .newsletter-form button:hover {
+            background-color: #f0c860;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #d4af37;
+        }
+
+        .copyright {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-form input,
+            .newsletter-form button {
+                border-radius: 30px;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">ARKITEKTUR<span>FRONT</span></a>
+            <nav>
+                <ul>
+                    <li><a href="#">Hem</a></li>
+                    <li><a href="#">Historiska byggnader</a></li>
+                    <li><a href="#">Modern arkitektur</a></li>
+                    <li><a href="#">Tipspromenader</a></li>
+                    <li><a href="#">Reseguider</a></li>
+                    <li><a href="#">Om oss</a></li>
+                </ul>
+                <button class="mobile-menu-btn">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Upptäck Arkitekturens Värld</h1>
+        <p>Utforska historiska byggnader och moderna mästerverk från världens storstäder. Lär dig deras historia och upplev unika tipspromenader.</p>
+        <a href="#" class="cta-button">Börja Utforska</a>
+        
+        <!-- Interactive Buildings -->
+        <div class="buildings-container" id="buildings"></div>
+    </section>
+
+    <!-- Latest Articles -->
+    <section class="articles-section">
+        <div class="container">
+            <h2 class="section-title">Senaste Artiklarna</h2>
+            <div class="articles-grid">
+                <div class="article-card">
+                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1509356843151-3e7d96241e11?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="article-content">
+                        <h3>🏛️ Stockholms Stadshus – nationalromantik vid vattnet</h3>
+                        <p>När Ragnar Östberg ritade Stockholms stadshus (invigt 1923) skapade han ett verk som är lika mycket ett monument över Sverige som en funktionell byggnad. Med sin 106 meter höga tornspira, krönt av de tre gyllene kronorna, är huset ett av landets mest kända landmärken.</p>
+                        <a href="stockholms-stadshus.html" class="read-more">Läs mer →</a>
+                    </div>
+                </div>
+                
+                <div class="article-card">
+                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1541336032412-2048a678540d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="article-content">
+                        <h3>Eiffeltornet - Från kontrovers till ikon</h3>
+                        <p>Upptäck hur Paris mest kända landmärke gick från att vara kontroversiellt till att bli en av världens mest älskade byggnader.</p>
+                        <a href="#" class="read-more">Läs mer →</a>
+                    </div>
+                </div>
+                
+                <div class="article-card">
+                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1513581166391-887a96ddeafd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="article-content">
+                        <h3>Turning Torso – skyskrapan som vrider sig mot framtiden</h3>
+                        <p>När Santiago Calatrava ritade Turning Torso (färdig 2005) satte Malmö Sverige på världskartan för modern arkitektur. Med sina 190 meter är byggnaden Nordens högsta skyskrapa och ett exempel på innovativ ingenjörskonst.</p>
+                        <a href="turning-torso.html" class="read-more">Läs mer →</a>
+                    </div>
+                </div>
+                
+                <div class="article-card">
+                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1503386435952-d7918b99d4c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="article-content">
+                        <h3>Gamla Stan - Stockholms historiska hjärta</h3>
+                        <p>En guide till de bästa tipspromenaderna i Stockholms medeltida stadskärna och dess fascinerande arkitekturhistoria.</p>
+                        <a href="#" class="read-more">Läs mer →</a>
+                    </div>
+                </div>
+                
+                <div class="article-card">
+                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1583037189850-1921ae7c6c22?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="article-content">
+                        <h3>Drottningholms Slott – svensk barock i världsklass</h3>
+                        <p>Vid Mälarens strand utanför Stockholm ligger Drottningholms slott, uppfört på 1600-talet av arkitekten Nicodemus Tessin d.ä. för drottning Hedvig Eleonora. Idag både kungafamiljens bostad och ett världsarv på UNESCO:s lista.</p>
+                        <a href="drottningholms-slott.html" class="read-more">Läs mer →</a>
+                    </div>
+                </div>
+                
+                <div class="article-card">
+                    <div class="article-image" style="background-image: url('https://images.unsplash.com/photo-1505902987837-7b8f4ff9c1e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="article-content">
+                        <h3>Burj Khalifa - Teknikens under</h3>
+                        <p>Hur byggde man världens högsta byggnad? Utforska den banbrytande tekniken bakom Dubais ikoniska skyskrapa.</p>
+                        <a href="#" class="read-more">Läs mer →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="newsletter">
+                <h3>Prenumerera på vårt nyhetsbrev</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Din e-postadress" required>
+                    <button type="submit">Prenumerera</button>
+                </form>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#">Om oss</a>
+                <a href="#">Kontakt</a>
+                <a href="#">Integritetspolicy</a>
+                <a href="#">Villkor</a>
+                <a href="#">Sociala medier</a>
+            </div>
+            
+            <p class="copyright">&copy; 2023 Arkitekturfront. Alla rättigheter förbehållna.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Create interactive buildings
+        const buildingsContainer = document.getElementById('buildings');
+        const buildingCount = 15;
+        
+        for (let i = 0; i < buildingCount; i++) {
+            const building = document.createElement('div');
+            building.className = 'building';
+            
+            // Random height between 100px and 250px
+            const height = Math.floor(Math.random() * 150) + 100;
+            building.style.height = `${height}px`;
+            
+            // Random width between 40px and 100px
+            const width = Math.floor(Math.random() * 60) + 40;
+            building.style.width = `${width}px`;
+            
+            // Random windows
+            const windowCount = Math.floor(height / 30);
+            for (let j = 0; j < windowCount; j++) {
+                const window = document.createElement('div');
+                window.style.position = 'absolute';
+                window.style.left = '10%';
+                window.style.width = '80%';
+                window.style.height = '10px';
+                window.style.backgroundColor = '#444';
+                window.style.top = `${20 + j * 30}px`;
+                building.appendChild(window);
+            }
+            
+            buildingsContainer.appendChild(building);
+        }
+
+        // Mouse move effect for buildings
+        document.addEventListener('mousemove', (e) => {
+            const buildings = document.querySelectorAll('.building');
+            const mouseX = e.clientX / window.innerWidth;
+            
+            buildings.forEach((building, index) => {
+                const delay = index * 0.05;
+                const moveX = (mouseX - 0.5) * 20;
+                
+                building.style.transform = `translateX(${moveX}px) scaleY(1.1)`;
+                
+                // Reset transform after a delay
+                setTimeout(() => {
+                    building.style.transform = 'translateX(0) scaleY(1)';
+                }, 300);
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navUl = document.querySelector('nav ul');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navUl.style.display = navUl.style.display === 'flex' ? 'none' : 'flex';
+        });
+    </script>
+</body>
+</html>
