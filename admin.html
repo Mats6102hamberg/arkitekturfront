@@ -293,7 +293,19 @@
 
         <!-- Articles List -->
         <div class="section">
-            <h2>Alla artiklar</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">Alla artiklar</h2>
+                <button class="btn btn-secondary" id="exportBtn" onclick="exportArticles()">📥 Exportera till JSON</button>
+            </div>
+            <div style="background-color: #0a0a0a; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #d4af37;">
+                <p style="color: #d4af37; margin-bottom: 10px;"><strong>💡 Viktigt för Vercel-deployment:</strong></p>
+                <p style="color: #aaa; font-size: 14px; line-height: 1.6;">
+                    Artiklar du skapar här sparas i localStorage (bara i din webbläsare). För att de ska synas på Vercel:<br>
+                    1. Klicka på "📥 Exportera till JSON" ovan<br>
+                    2. Ersätt filen <code style="background: #1a1a1a; padding: 2px 6px; border-radius: 3px;">articles.json</code> i projektet med den nedladdade filen<br>
+                    3. Pusha till GitHub: <code style="background: #1a1a1a; padding: 2px 6px; border-radius: 3px;">git add . && git commit -m "Uppdatera artiklar" && git push</code>
+                </p>
+            </div>
             <div id="articlesList" class="articles-list"></div>
         </div>
     </div>
